@@ -1,0 +1,20 @@
+import { Clock3, ShieldCheck, TrendingUp, MapPinned } from "lucide-react";
+import SafetyScore from "./SafetyScore";
+import { RouteOption, SafePlace } from "../types";
+
+export default function Dashboard({route,places,onBack}:{route:RouteOption;places:SafePlace[];onBack:()=>void}){
+ return <main className="mx-auto max-w-[1500px] px-4 py-6 lg:px-6">
+  <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-widest text-emerald-600">Commute overview</p><h1 className="mt-1 text-3xl font-black tracking-tight dark:text-white">Your safety dashboard</h1><p className="mt-1 text-sm text-slate-500">A glanceable view of your selected commute and general area trends.</p></div><button onClick={onBack} className="rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white dark:bg-emerald-600">Back to map</button></div>
+  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+   <div className="rounded-3xl bg-slate-950 p-5 text-white shadow-soft"><ShieldCheck className="text-emerald-400"/><p className="mt-6 text-xs font-bold uppercase tracking-widest text-slate-400">Current route</p><p className="mt-1 text-xl font-black">{route.kind}</p></div>
+   <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900"><p className="text-xs font-bold uppercase tracking-widest text-slate-500">Safety score</p><div className="mt-3"><SafetyScore score={route.score}/></div></div>
+   <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900"><Clock3 className="text-slate-500"/><p className="mt-5 text-xs font-bold uppercase tracking-widest text-slate-500">Estimated arrival</p><p className="mt-1 text-2xl font-black dark:text-white">{route.duration}</p><p className="text-xs text-slate-500">{route.distance}</p></div>
+   <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900"><TrendingUp className="text-emerald-600"/><p className="mt-5 text-xs font-bold uppercase tracking-widest text-slate-500">30-day trend</p><p className="mt-1 text-2xl font-black text-emerald-600">+6%</p><p className="text-xs text-slate-500">Area safety indicator improvement</p></div>
+  </div>
+  <div className="mt-4 grid gap-4 lg:grid-cols-3">
+   <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900 lg:col-span-2"><h2 className="text-lg font-extrabold dark:text-white">Recent general safety trends</h2><div className="mt-5 grid gap-3 sm:grid-cols-3">{[["Lighting coverage","High"],["Public facility access","Good"],["Incident density","Low concern"]].map(([a,b])=><div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/60" key={a}><p className="text-xs text-slate-500">{a}</p><p className="mt-2 font-black dark:text-white">{b}</p></div>)}</div></section>
+   <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-900"><h2 className="text-lg font-extrabold dark:text-white">Nearby safe places</h2><div className="mt-4 space-y-3">{places.slice(0,4).map(p=><div key={p.id} className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40"><MapPinned size={16}/></span><div><p className="text-sm font-bold dark:text-white">{p.name}</p><p className="text-xs text-slate-500">{p.distance}</p></div></div>)}</div></section>
+  </div>
+  <p className="mt-5 rounded-2xl bg-slate-100 p-4 text-xs leading-5 text-slate-500 dark:bg-slate-800">Safety scores are estimates based on available aggregated data. They are not guarantees of personal safety and should be combined with your own judgement and current conditions.</p>
+ </main>
+}
